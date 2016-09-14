@@ -1,9 +1,13 @@
 # ukcloud_vcloud_chrome
-Chrome Plugin for Managing vCloud Director Edge Gateways
+#Chrome Plugin for Managing vCloud Director Edge Gateways
+
+## Synposis
 
 I’ve come up with various scripts and modules to interfacing with vCloud, but got fed up with them not necessarily being cross platform, or non-techie friendly. So I’ve been looking at Chrome Apps as it seems like a good way to create cross platform tooling with GUI’s…. Chrome App’s are pretty cool, if you can write HTML/JS/Jquery app’s it’s very quick, gets you around CRS issues and provides a load of local storage API’s etc. 
 
 So, I’ve built a basic App that interfaces with vCloud to allow you to edit the config of vShields. In the short term, I’ll probably add something to allow you to change VM NIC’s to VMXNET3.
+
+## How To
 
 To use it – It looks complicated, but it’s literally drag and drop a file into Chrome!
 *	In Chrome go to Settings -> Extensions
