@@ -1,0 +1,209 @@
+<html>
+  <head>
+    <script type="text/javascript" src="jquery-3.1.0.min.js"></script>
+    <link rel="stylesheet" href="bootstrap/css/bootstrap.css" />
+    <script type="text/javascript" src="bootstrap/js/bootstrap.js"></script>
+    <link rel="stylesheet" href="bootstrap-select/dist/css/bootstrap-select.css" />
+    <script type="text/javascript" src="bootstrap-select/js/bootstrap-select.js"></script>
+    <link rel="stylesheet" href="style.css" />
+    <script src="codemirror/lib/codemirror.js"></script>
+    <link rel="stylesheet" href="codemirror/lib/codemirror.css" />
+    <script type="text/javascript" src="vcloud.js"></script>
+    <script src="codemirror/mode/xml/xml.js"></script>
+	<link rel="stylesheet" href="dashboard.css" />
+	<script src="codemirror/addon/display/autorefresh.js"></script>
+	
+    <title></title>
+  </head>
+  <body>
+	<nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container-fluid" style="background:#00d2b3;">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+		  <img src='ukcloudlogo.png' style="float:left;margin-right:5px;"><a class="navbar-brand" href="#" style="color:white;"><span>UKCloud vCloud Editor</span></a>
+        </div>
+		<div id="navbar" class="navbar-collapse collapse">
+		<form class="navbar-form navbar-right">
+          <a href="#" class="form-control btn btn-danger" id="loginstatus">Login Status: Not Logged In</a>
+		<form>
+		</div>
+        
+      </div>
+    </nav>
+	<div class="container-fluid">
+      <div class="row">
+        <div class="col-sm-3 col-md-2 sidebar">
+          <ul class="nav nav-sidebar">
+            <li class="active"><a data-toggle="tab" href="#home">Credentials</a></li>
+            <li style="display:none" class="only-loggedin"><a data-toggle="tab" href="#vshieldtab">vShield</a></li>
+            <li style="display:none" class="only-loggedin"><a data-toggle="tab" href="#taskstab">Tasks</a></li>
+          </ul>
+          
+        </div>
+        <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+          <div class="tab-content">
+			<div id="home" class="tab-pane fade in active">
+				<div class="checkbox">
+					<label><input type="checkbox" value="" id="is_customer">Are you a UKCloud customer?</label>
+				</div>
+				<div id="ukcloudcreds" style="display:none">
+					<h2>UKCloud Portal Credentials</h2>
+					<div class="form-group">
+						<label for="ukcloud_username">User Name</label> 
+						<input type="text" id="ukcloud_username" class="form-control" />
+					</div>
+					<div class="form-group">
+						<label for="ukcloud_password">Password</label> 
+						<input type="password" id="ukcloud_password" class="form-control" />
+					</div>
+					<button class="btn btn-success" id="getaccounts">Get UKCloud API Details</button> 
+					<hr>
+					<div id="ukcloud_options" style="display:none">
+					<div class="form-group">
+						<label for="accounts" id="accountslabel">Available Accounts</label> 
+						<div id="getaccounts_spinner" style="display:none;float:right;">
+							<img src='spinner.gif' />
+						</div>
+						<select id="accounts" class="form-control">
+							<option val='0'>Please Select...</option>
+						</select>
+					</div>
+					<div class="form-group">
+						<label for="services" id="serviceslabel">Available Services</label> 
+						<div id="getservices_spinner" style="display:none;float:right;">
+							<img src='spinner.gif' />
+						</div>
+						<div id="services_spinny" style="display:none;float:left;">
+							<img src='spinner.gif' />
+						</div>
+						<select id="services" class="form-control">
+							<option val='0'>Please Select...</option>
+						</select>
+					</div>
+					</div>
+				</div>
+				<div class="alert alert-info" style="display:none" id="credflash">
+					<strong>Success!</strong> API Credential Information Populated Below... Click Login
+				</div>
+				<h2>vCloud Credentials</h2>
+				<form role="form">
+					<div class="form-group">
+						<label for="apiurl">API URL</label> 
+						<input type="text" id="apiurl" class="form-control" placeholder="https://vcd.portal.skyscapecloud.com/api" />
+					</div>
+					<div class="form-group">
+						<label for="org">vCloud Organisation ID</label> 
+						<input type="text" id="org" class="form-control" />
+					</div>
+					<div class="form-group">
+						<label for="username">User Name</label> 
+						<input type="text" id="username" class="form-control" />
+					</div>
+					<div class="form-group">
+						<label for="password">Password</label> 
+						<input type="password" id="password" class="form-control" />
+					</div>
+				</form>
+				<button class="btn btn-success" id="getcookie">Login</button> 
+			</div>
+			
+			
+			<div id="vshieldtab" class="tab-pane fade">
+				<button style="margin-left:5px;" class="btn btn-success" id="getorgs">Get Organisations</button>
+				<div id="actiondiv" style="display:none;float:right;">
+							<button class="btn btn-danger" id="postback">Update Config for vShield Edge</button>
+						</div>
+				<div id="getvdc_spinner" style="display:none;float:right;">
+					<img src='spinner.gif' />
+				</div>
+				<hr />
+				<div class="form-group form-inline">
+					<label for="orgs" id="orgslabel" class="control-label col-xs-3">Organisations</label> 
+					<select id="orgs" class="form-control">
+						<option val='0'>Please Select...</option>
+					</select>
+				</div>
+				<div class="form-group form-inline">
+					<label for="vdcs" id="vdclabel" class="control-label col-xs-3">Virtual Datacenters</label> 
+					<select id="vdcs" class="form-control">
+						<option val='0'>Please Select...</option>
+					</select>
+				</div>
+				<div class="form-group form-inline">
+					<label for="gateways" id="gatewaylabel" class="control-label col-xs-3">vShield Edge Gateways</label> 
+					<select id="gateways" class="form-control">
+						<option val='0'>Please Select...</option>
+					</select>
+				</div>
+				<hr />
+				<ul class="nav nav-tabs">
+					<li class="active">
+						<a data-toggle="tab" href="#firewalltab">Firewall</a>
+					</li>
+					<li>
+						<a data-toggle="tab" href="#nattab">NAT</a>
+					</li>
+					<li>
+						<a data-toggle="tab" href="#dhcptab">DHCP</a>
+					</li>
+					<li>
+						<a data-toggle="tab" href="#lbtab">Load Balancer</a>
+					</li>
+					<li>
+						<a data-toggle="tab" href="#vpntab">VPN</a>
+					</li>
+					<li>
+						<a data-toggle="tab" href="#rawxmltab" id="rawxmlbutton">Raw XML</a>
+					</li>
+				</ul>
+				<div class="tab-content">
+					<div id="firewalltab" class="tab-pane fade in active">
+					<div id="fwtable">
+					</div>
+					</div>
+					<div id="nattab" class="tab-pane fade in">
+					<div id="nattable">
+					</div>
+					</div>
+					<div id="dhcptab" class="tab-pane fade in">
+					</div>
+					<div id="lbtab" class="tab-pane fade in">
+					</div>
+					<div id="vpntab" class="tab-pane fade in">
+					<div id="vpntable">
+					</div>
+					</div>
+					<div id="rawxmltab" class="tab-pane fade in">
+												
+						<div class="form-group">
+							<div id="getxmlspinny" style="display:none;">
+							<img src='spinner.gif' />
+							</div>
+							<div id="editor">                                                                     
+							</div>
+						</div>
+					</div>
+				
+				</div>
+			</div>
+			<div id="taskstab" class="tab-pane fade">
+				<button class="btn btn-success" id="refresh_tasks_btn">Refresh Tasks</button>
+				<div id="taskstable">
+				</div>
+			</div>
+		</div>
+	  </div>
+		</div>
+	  </div>
+	</div>
+
+	
+		
+    
+  </body>
+</html>

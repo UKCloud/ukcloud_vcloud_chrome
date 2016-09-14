@@ -1,0 +1,17 @@
+{
+  "name": "UKCloud vCloud Editor",
+  "description": "Simple GUI for Editing vCloud",
+  "version": "0.2",
+  "manifest_version": 2,
+  "app": {
+    "background": {
+      "scripts": ["background.js","testing.js","codemirror/lib/codemirror.js","codemirror/mode/xml/xml.js","bootstrap/js/bootstrap.js","bootstrap-select/js/bootstrap-select.js","codemirror/addon/display/autorefresh.js"]
+    }
+  },
+  "permissions": [
+	"https://*/*",
+	"http://*/*",
+	"storage"
+  ],
+  "icons": { "16": "vcloud-editor-16.png", "128": "vcloud-editor-128.png" }
+}
